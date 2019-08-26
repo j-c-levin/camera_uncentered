@@ -676,8 +676,8 @@
                       "points": [],
                       "originPoint": {
                         "name": "origine",
-                        "x": 0,
-                        "y": 0
+                        "x": 32,
+                        "y": 32
                       },
                       "centerPoint": {
                         "automatic": true,
@@ -695,39 +695,6 @@
         }
       ],
       "events": [
-        {
-          "disabled": false,
-          "folded": false,
-          "type": "BuiltinCommonInstructions::Standard",
-          "conditions": [
-            {
-              "type": {
-                "inverted": false,
-                "value": "KeyPressed"
-              },
-              "parameters": [
-                "",
-                "q"
-              ],
-              "subInstructions": []
-            }
-          ],
-          "actions": [
-            {
-              "type": {
-                "inverted": false,
-                "value": "Scene"
-              },
-              "parameters": [
-                "",
-                "\"main\"",
-                ""
-              ],
-              "subInstructions": []
-            }
-          ],
-          "events": []
-        },
         {
           "disabled": false,
           "folded": false,
@@ -790,102 +757,6 @@
           "disabled": false,
           "folded": false,
           "type": "BuiltinCommonInstructions::Standard",
-          "conditions": [
-            {
-              "type": {
-                "inverted": false,
-                "value": "Egal"
-              },
-              "parameters": [
-                "player.X() - screen_tracker.X()",
-                ">",
-                "200"
-              ],
-              "subInstructions": []
-            }
-          ],
-          "actions": [
-            {
-              "type": {
-                "inverted": false,
-                "value": "MettreX"
-              },
-              "parameters": [
-                "screen_tracker",
-                "=",
-                "lerp(screen_tracker.X(), player.X() - 200, 0.25)"
-              ],
-              "subInstructions": []
-            },
-            {
-              "type": {
-                "inverted": false,
-                "value": "CameraX"
-              },
-              "parameters": [
-                "",
-                "=",
-                "screen_tracker.X()",
-                "",
-                ""
-              ],
-              "subInstructions": []
-            }
-          ],
-          "events": []
-        },
-        {
-          "disabled": false,
-          "folded": false,
-          "type": "BuiltinCommonInstructions::Standard",
-          "conditions": [
-            {
-              "type": {
-                "inverted": false,
-                "value": "Egal"
-              },
-              "parameters": [
-                "player.X() - screen_tracker.X()",
-                "<",
-                "-200"
-              ],
-              "subInstructions": []
-            }
-          ],
-          "actions": [
-            {
-              "type": {
-                "inverted": false,
-                "value": "MettreX"
-              },
-              "parameters": [
-                "screen_tracker",
-                "=",
-                "lerp(screen_tracker.X(), player.X() + 200, 0.25)"
-              ],
-              "subInstructions": []
-            },
-            {
-              "type": {
-                "inverted": false,
-                "value": "CameraX"
-              },
-              "parameters": [
-                "",
-                "=",
-                "screen_tracker.X()",
-                "",
-                ""
-              ],
-              "subInstructions": []
-            }
-          ],
-          "events": []
-        },
-        {
-          "disabled": false,
-          "folded": false,
-          "type": "BuiltinCommonInstructions::Standard",
           "conditions": [],
           "actions": [
             {
@@ -897,6 +768,20 @@
                 "player",
                 "animate",
                 "PlatformerObject",
+                ""
+              ],
+              "subInstructions": []
+            },
+            {
+              "type": {
+                "inverted": false,
+                "value": "camera_movement::uncentered_follow_player"
+              },
+              "parameters": [
+                "",
+                "screen_tracker",
+                "player",
+                "200",
                 ""
               ],
               "subInstructions": []
@@ -1182,6 +1067,154 @@
           "propertyDescriptors": []
         }
       ]
+    },
+    {
+      "author": "",
+      "description": "",
+      "extensionNamespace": "",
+      "fullName": "",
+      "name": "camera_movement",
+      "shortDescription": "",
+      "tags": "",
+      "version": "",
+      "eventsFunctions": [
+        {
+          "description": "Follow the player uncentered",
+          "fullName": "Follow uncentered",
+          "functionType": "Action",
+          "name": "uncentered_follow_player",
+          "sentence": "Move the camera when _PARAM2_ moves _PARAM3_ pixels away from _PARAM1_",
+          "events": [
+            {
+              "disabled": false,
+              "folded": false,
+              "type": "BuiltinCommonInstructions::Standard",
+              "conditions": [
+                {
+                  "type": {
+                    "inverted": false,
+                    "value": "Egal"
+                  },
+                  "parameters": [
+                    "player.X() - reference.X()",
+                    ">",
+                    "GetArgumentAsNumber(\"lag_distance\")"
+                  ],
+                  "subInstructions": []
+                }
+              ],
+              "actions": [
+                {
+                  "type": {
+                    "inverted": false,
+                    "value": "MettreX"
+                  },
+                  "parameters": [
+                    "reference",
+                    "=",
+                    "lerp(reference.X(), player.X() - GetArgumentAsNumber(\"lag_distance\"), 0.25)"
+                  ],
+                  "subInstructions": []
+                },
+                {
+                  "type": {
+                    "inverted": false,
+                    "value": "CameraX"
+                  },
+                  "parameters": [
+                    "",
+                    "=",
+                    "reference.X()",
+                    "",
+                    ""
+                  ],
+                  "subInstructions": []
+                }
+              ],
+              "events": []
+            },
+            {
+              "disabled": false,
+              "folded": false,
+              "type": "BuiltinCommonInstructions::Standard",
+              "conditions": [
+                {
+                  "type": {
+                    "inverted": false,
+                    "value": "Egal"
+                  },
+                  "parameters": [
+                    "player.X() - reference.X()",
+                    "<",
+                    "-GetArgumentAsNumber(\"lag_distance\")"
+                  ],
+                  "subInstructions": []
+                }
+              ],
+              "actions": [
+                {
+                  "type": {
+                    "inverted": false,
+                    "value": "MettreX"
+                  },
+                  "parameters": [
+                    "reference",
+                    "=",
+                    "lerp(reference.X(), player.X() + GetArgumentAsNumber(\"lag_distance\"), 0.25)"
+                  ],
+                  "subInstructions": []
+                },
+                {
+                  "type": {
+                    "inverted": false,
+                    "value": "CameraX"
+                  },
+                  "parameters": [
+                    "",
+                    "=",
+                    "reference.X()",
+                    "",
+                    ""
+                  ],
+                  "subInstructions": []
+                }
+              ],
+              "events": []
+            }
+          ],
+          "parameters": [
+            {
+              "codeOnly": false,
+              "defaultValue": "",
+              "description": "The reference object expedcted to be in the middle of the screen",
+              "name": "reference",
+              "optional": false,
+              "supplementaryInformation": "Sprite",
+              "type": "objectList"
+            },
+            {
+              "codeOnly": false,
+              "defaultValue": "",
+              "description": "The player to follow",
+              "name": "player",
+              "optional": false,
+              "supplementaryInformation": "Sprite",
+              "type": "objectList"
+            },
+            {
+              "codeOnly": false,
+              "defaultValue": "",
+              "description": "How far the player should be from the reference object before the camera follows",
+              "name": "lag_distance",
+              "optional": false,
+              "supplementaryInformation": "",
+              "type": "expression"
+            }
+          ],
+          "objectGroups": []
+        }
+      ],
+      "eventsBasedBehaviors": []
     }
   ],
   "externalLayouts": [],
